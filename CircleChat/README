@@ -1,0 +1,7 @@
+Circle Chat a lovely ring based chat program.
+
+To Do:
+1. Add command to add in a user
+2. Add second hop for handling drop outs (See Redundancy Discussion)
+3. Change the protocol to be more useful than 4 lines
+4. Improve GUI?
