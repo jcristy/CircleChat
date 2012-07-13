@@ -187,12 +187,11 @@ public class ChatClient {
 	 * @param text	The text to add (typically handle:message
 	 */
 	public static void addToMessages(String text) {
-		boolean atBottom = sp_for_messages.getVerticalScrollBar().getMaximum() == sp_for_messages
-				.getVerticalScrollBar().getValue();
+		
+		
 		ta_messages.setText(ta_messages.getText() + "\r\n" + text);
-		if (atBottom)
-			sp_for_messages.getVerticalScrollBar().setValue(
-					sp_for_messages.getVerticalScrollBar().getMaximum());
+		ta_messages.setCaretPosition(ta_messages.getDocument().getLength());
+		
 	}
 	/**
 	 * Sets the previous hop data field
