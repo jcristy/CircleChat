@@ -29,7 +29,7 @@ public class LeachServer implements Runnable {
 				try {
 					reply = inbound.accept();
 
-					System.out.println("Got a Leech");
+					
 					ChatClient.tf_prev_hop.setText(reply.getInetAddress()
 							.getHostAddress());
 
@@ -39,10 +39,11 @@ public class LeachServer implements Runnable {
 					while (!ChatClient.quit) {
 						Message msg = new Message(message_br);
 						
-
-						if (!ChatClient.sent_messages.remove(msg.uid)) {
+						
+						if (!ChatClient.sent_messages.remove(msg.uid)) 
+						{
 							Thread t = new Thread(new SendAMessage(
-									UUID.fromString(msg.uid), msg.handle, msg.command,
+									UUID.fromString(msg.uid), msg.handle, msg.getCommandString(),
 									msg.message));
 							t.start();
 						}

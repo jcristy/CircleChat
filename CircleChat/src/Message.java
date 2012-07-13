@@ -15,7 +15,7 @@ public class Message
 {
 	String uid;
 	String handle;
-	String command;
+	private int command;
 	String message;
 	
 	/**
@@ -28,8 +28,10 @@ public class Message
 		{
 			uid = message_br.readLine();
 			handle = message_br.readLine();
-			command = message_br.readLine();
+			String temp = message_br.readLine();
+			command = commandInt(temp);
 			message = message_br.readLine();
+			
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -42,7 +44,11 @@ public class Message
 	 * @param command
 	 * @param message
 	 */
-	public Message (String uid, String handle, String command, String message)
+	public Message (String uid, String handle, String Command, String message)
+	{
+		this(uid,handle,commandInt(Command),message);
+	}
+	public Message (String uid, String handle, int command, String message)
 	{
 		this.uid = uid;
 		this.handle = handle;
@@ -58,7 +64,43 @@ public class Message
 	{
 		dos.write((uid + "\r\n").getBytes());
 		dos.write((handle + "\r\n").getBytes());
-		dos.write((command + "\r\n").getBytes());
+		dos.write((getCommandString() + "\r\n").getBytes());
 		dos.write((message + "\r\n").getBytes());
+	}
+	public static int commandInt(String cmd)
+	{
+		if (cmd.equals(Values.SEND_MESSAGE))
+			return Values.SEND_MESSAGE_I;
+		else if (cmd.equals(Values.JOIN))
+			return Values.JOIN_I;
+		else if (cmd.equals(Values.LEAVE))
+			return Values.LEAVE_I;
+		else
+			return -1;
+	}
+	public String getCommandString()
+	{
+		return commandStr(command);
+	}
+	public int getCommand()
+	{
+		return command;
+	}
+	public static String commandStr(int cmd)
+	{
+		switch(cmd)
+		{
+		case Values.SEND_MESSAGE_I:
+			return Values.SEND_MESSAGE;
+			
+		case Values.LEAVE_I:
+			return Values.LEAVE;
+			
+		case Values.JOIN_I:
+			return Values.JOIN;
+			
+		default:
+			return "";
+		}
 	}
 }

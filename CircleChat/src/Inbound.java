@@ -34,16 +34,29 @@ public class Inbound implements Runnable {
 					
 					Message msg = new Message(message_br);
 					
-					if (msg.command.equals(Values.SEND_MESSAGE))
-						dos.write(("Got it!\r\n").getBytes());
-
+					
+					switch (msg.getCommand())
+					{
+					case Values.SEND_MESSAGE_I:
+						dos.write(Values.ACK.getBytes());
+						ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
+						break;
+					case Values.JOIN_I:
+						
+						break;
+					case Values.LEAVE_I:
+						
+						break;
+					default:
+					}
+					
 					dos.close();
 					reply.close();
 					message_br.close();
-					ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
+					
 					if (!ChatClient.sent_messages.remove(msg.uid)) {
 						Thread t = new Thread(new SendAMessage(
-								UUID.fromString(msg.uid), msg.handle, msg.command, msg.message));
+								UUID.fromString(msg.uid), msg.handle, msg.getCommandString(), msg.message));
 						t.start();
 					}
 				} catch (SocketTimeoutException ste) {

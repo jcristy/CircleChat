@@ -24,7 +24,19 @@ public class LeachClient implements Runnable {
 				
 				Message msg = new Message(message_br);
 
-				ChatClient.addToMessages(msg.handle	+ " " + ": " + msg.message);
+				switch (msg.getCommand())
+				{
+				case Values.SEND_MESSAGE_I:
+					ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
+					break;
+				case Values.JOIN_I:
+					
+					break;
+				case Values.LEAVE_I:
+					
+					break;
+				default:
+				}
 			}
 
 		} catch (UnknownHostException e) {

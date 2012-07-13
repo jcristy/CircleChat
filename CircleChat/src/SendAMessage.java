@@ -31,7 +31,6 @@ public class SendAMessage implements Runnable {
 				s.connect(new InetSocketAddress(ChatClient.getNextHop(), Values.RING_SOCKET),
 						2000);
 
-				System.out.println("Connected, will try to send");
 
 				ChatClient.sent_messages.add(uuid.toString());
 
@@ -43,7 +42,7 @@ public class SendAMessage implements Runnable {
 
 				BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				String ack = br.readLine();
-				if (ack.equals("Got it!")) {
+				if (ack.equals(Values.ACK)) {
 					System.out.println("Success");
 				}
 

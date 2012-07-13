@@ -12,7 +12,16 @@ public class Values
 	final static int RING_SOCKET = 8082;
 	
 	
+	final static String ACK = "ACK";
+	
 	//COMMANDS
 	/** Command to send a message */
 	final static String SEND_MESSAGE = "message";
+	final static int SEND_MESSAGE_I = 0;
+	
+	final static String JOIN = "join";
+	final static int JOIN_I = 1;
+	
+	final static String LEAVE = "bye";
+	final static int LEAVE_I = 2;
 }
