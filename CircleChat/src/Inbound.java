@@ -15,7 +15,7 @@ public class Inbound implements Runnable {
 
 	public ServerSocket inbound;
 
-	@Override
+	
 	public void run() {
 		try {
 
@@ -42,7 +42,11 @@ public class Inbound implements Runnable {
 						ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
 						break;
 					case Values.JOIN_I:
-						
+						dos.write((ChatClient.getNextHop()+"\r\n").getBytes());
+						dos.flush();
+						String response = message_br.readLine();
+						if (response.equals(Values.ACK))
+							ChatClient.setNextHop(reply.getInetAddress().getHostAddress());
 						break;
 					case Values.LEAVE_I:
 						

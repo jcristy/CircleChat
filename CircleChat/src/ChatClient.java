@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
-
+import javax.swing.JButton;
 /**
  * Chat client is a ring based chat application
  * @author jcristy
@@ -37,6 +37,8 @@ public class ChatClient {
 	static JTextField tf_prev_hop;
 	static JTextField tf_leach_ip;
 	static JScrollPane sp_for_messages;
+	static JButton btn_join;
+	static JButton btn_exit;
 
 	static JRadioButton rb_leach;
 	static JRadioButton rb_next_hop;
@@ -61,11 +63,25 @@ public class ChatClient {
 		tf_prev_hop = new JTextField();
 		tf_leach_ip = new JTextField();
 
+		btn_join = new JButton("Join");
+		btn_exit = new JButton("");
+		btn_exit.setEnabled(true);
+		btn_join.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e)
+			{
+				Thread t = new Thread(new SendAMessage(UUID.randomUUID(),
+								tf_handle.getText(), 
+								Values.JOIN, 
+								""));
+				t.start();
+			}
+		});
+
 		tf_prev_hop.setEditable(false);
 		tf_leach_ip.setEditable(false);
 
 		JPanel Controls = new JPanel();
-		Controls.setLayout(new GridLayout(4, 2));
+		Controls.setLayout(new GridLayout(5, 2));
 
 		JPanel NextHopLeach = new JPanel();
 		ButtonGroup leach_next_hop = new ButtonGroup();
@@ -76,7 +92,6 @@ public class ChatClient {
 		rb_next_hop.setSelected(true);
 		rb_leach.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (rb_leach.isSelected()) {
 					System.out.println("Leech will try to start!");
@@ -101,6 +116,8 @@ public class ChatClient {
 		Controls.add(tf_prev_hop);
 		Controls.add(new JLabel("Leech:"));
 		Controls.add(tf_leach_ip);
+		Controls.add(btn_join);
+		Controls.add(btn_exit);
 
 		ta_messages = new JTextArea(20, 50);
 		ta_messages.setEditable(false);
@@ -117,7 +134,7 @@ public class ChatClient {
 		Editor.add(tf_message);
 		tf_message.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "SEND");
 		tf_message.getActionMap().put("SEND", new AbstractAction() {
-			@Override
+			
 			public void actionPerformed(ActionEvent arg0) {
 
 				Thread t = new Thread(
@@ -133,11 +150,9 @@ public class ChatClient {
 
 		theFrame.addWindowListener(new WindowListener() {
 
-			@Override
 			public void windowActivated(WindowEvent arg0) {
 			}
 
-			@Override
 			public void windowClosed(WindowEvent arg0) {
 				if (inbound != null)
 					try {
@@ -148,23 +163,18 @@ public class ChatClient {
 					}
 			}
 
-			@Override
 			public void windowClosing(WindowEvent arg0) {
 			}
 
-			@Override
 			public void windowDeactivated(WindowEvent arg0) {
 			}
 
-			@Override
 			public void windowDeiconified(WindowEvent arg0) {
 			}
 
-			@Override
 			public void windowIconified(WindowEvent arg0) {
 			}
 
-			@Override
 			public void windowOpened(WindowEvent arg0) {
 			}
 
@@ -208,5 +218,11 @@ public class ChatClient {
 	public static String getNextHop() {
 		return tf_next_hop.getText();
 	}
-
+	/**
+	 * Sets the next hop field
+	 * @parap text the new IP address
+	 */
+	public static void setNextHop(String text) {
+		tf_next_hop.setText(text);
+	}
 }
