@@ -1,7 +1,31 @@
 Circle Chat a lovely ring based chat program.
 
+Architecture:
+Each node has a next hop.  Each message is sent around the ring to each nodes next hop until it arrives at the source, who will not forward it.
+A leech is not in the ring, but receives everything the host receives.  The host also forwards messages from the leech as if he were the source.
+
+Files:
+ChatClient.java
+	Main, handles the GUI
+Inbound.java
+	Handles the inbound ring server
+LeachClient.java
+	Handles a leech connection to a host (leech server)
+LeachServer.java
+	Handles the host part of a leech user
+Message.java
+	Helps with message sending/receiving
+SendAMessage.java
+	Opens connection to next hop server.
+Values.java
+	Global values
+
 To Do:
 1. Add command to add in a user
 2. Add second hop for handling drop outs (See Redundancy Discussion)
-3. Change the protocol to be more useful than 4 lines
-4. Improve GUI?
+3. Add graceful exit to continue the chain if someone intentionally leaves
+4. Change the protocol to be more useful than 4 lines
+5. Improve GUI (SEE GUIDiscussion)
+
+Bugs:
+1. Leech messages show up on the leech's host twice (once when he first receives it and when it completes the ring)
