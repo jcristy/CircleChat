@@ -89,6 +89,8 @@ public class ChatClient {
 		tf_prev_hop = new JTextField();
 		tf_leach_ip = new JTextField();
 
+		final ButtonGroup leach_next_hop = new ButtonGroup();
+		
 		btn_join = new JButton("Join");
 		btn_exit = new JButton("Exit Gracefully");
 		btn_join.addActionListener(new ActionListener(){
@@ -161,6 +163,8 @@ public class ChatClient {
 						Values.LEAVE, 
 						tf_next_hop.getText(),tf_prev_hop.getText());
 				sam.run();
+				tf_next_hop.setText("");
+				leach_next_hop.clearSelection();
 			}
 			
 		});
@@ -173,7 +177,7 @@ public class ChatClient {
 		Controls.setLayout(new GridLayout(5, 2));
 
 		JPanel NextHopLeach = new JPanel();
-		ButtonGroup leach_next_hop = new ButtonGroup();
+		
 
 		rb_leach = new JRadioButton("Leech onto:");
 		rb_leach.setEnabled(false);
