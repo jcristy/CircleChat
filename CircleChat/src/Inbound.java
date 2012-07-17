@@ -49,7 +49,7 @@ public class Inbound implements Runnable {
 							ChatClient.setNextHop(reply.getInetAddress().getHostAddress());
 						break;
 					case Values.LEAVE_I:
-						
+						ChatClient.setNextHop(msg.message);
 						break;
 					default:
 					}

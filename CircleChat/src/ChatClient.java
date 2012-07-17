@@ -91,7 +91,6 @@ public class ChatClient {
 
 		btn_join = new JButton("Join");
 		btn_exit = new JButton("Exit Gracefully");
-		btn_exit.setEnabled(false);
 		btn_join.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
@@ -151,6 +150,21 @@ public class ChatClient {
 			}
 		});
 
+		btn_exit.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				//We want to block so the message is sent before we shut the program down
+				SendAMessage sam = new SendAMessage(UUID.randomUUID(),
+						tf_handle.getText(), 
+						Values.LEAVE, 
+						tf_next_hop.getText(),tf_prev_hop.getText());
+				sam.run();
+			}
+			
+		});
+		
 		tf_prev_hop.setEditable(false);
 		tf_leach_ip.setEditable(false);
 		tf_next_hop.setEditable(false);
