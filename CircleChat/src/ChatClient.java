@@ -200,16 +200,17 @@ public class ChatClient {
 		NextHopLeach.add(rb_next_hop);
 		NextHopLeach.add(rb_leach);
 
+		Controls.add(btn_join);
+		Controls.add(btn_exit);
 		Controls.add(NextHopLeach);
 		Controls.add(tf_next_hop);
-		Controls.add(new JLabel("Handle:"));
-		Controls.add(tf_handle);
 		Controls.add(new JLabel("Prev Hop:"));
 		Controls.add(tf_prev_hop);
 		Controls.add(new JLabel("Leech:"));
 		Controls.add(tf_leach_ip);
-		Controls.add(btn_join);
-		Controls.add(btn_exit);
+		Controls.add(new JLabel("Handle:"));
+		Controls.add(tf_handle);
+		
 
 		ta_messages = new JTextArea(20, 50);
 		ta_messages.setEditable(false);
