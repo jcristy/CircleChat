@@ -1,5 +1,8 @@
+import help.Help;
+
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -15,6 +18,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -58,6 +64,23 @@ public class ChatClient {
 		sent_messages = new ArrayList<String>();
 
 		theFrame = new JFrame();
+		theFrame.setTitle("Circle Chat");
+		JMenuBar themenubar = new JMenuBar();
+		theFrame.setJMenuBar(themenubar);
+		JMenu menu_help = new JMenu("Help");
+		themenubar.add(menu_help);
+		JMenuItem mi_show_help = new JMenuItem("Help");
+		mi_show_help.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				JDialog HelpDialog = new Help();
+				HelpDialog.setVisible(true);
+			}
+			
+		});
+		menu_help.add(mi_show_help);
 
 		tf_next_hop = new JTextField();
 		tf_handle = new JTextField();
