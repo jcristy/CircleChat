@@ -25,8 +25,7 @@ public class Inbound implements Runnable {
 				try {
 					Socket reply = inbound.accept();
 					System.out.println("Got a message");
-					ChatClient.setPrevHop(reply.getInetAddress()
-							.getHostAddress());
+					
 					DataOutputStream dos = new DataOutputStream(
 							reply.getOutputStream());
 
@@ -38,6 +37,8 @@ public class Inbound implements Runnable {
 					switch (msg.getCommand())
 					{
 					case Values.SEND_MESSAGE_I:
+						ChatClient.setPrevHop(reply.getInetAddress()
+								.getHostAddress());
 						dos.write(Values.ACK.getBytes());
 						ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
 						break;
