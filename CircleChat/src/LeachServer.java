@@ -29,8 +29,7 @@ public class LeachServer implements Runnable {
 				try {
 					reply = inbound.accept();
 
-					
-					ChatClient.tf_prev_hop.setText(reply.getInetAddress()
+					ChatClient.tf_leach_ip.setText(reply.getInetAddress()
 							.getHostAddress());
 
 					BufferedReader message_br = new BufferedReader(
