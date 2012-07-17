@@ -16,19 +16,26 @@ public class SendAMessage implements Runnable {
 	String handle;
 	String command;
 	String message;
+	String destination;
 
 	public SendAMessage(UUID uuid, String handle, String command, String message) {
+		this(uuid,handle,command,message,ChatClient.getNextHop());
+	}
+	
+	public SendAMessage(UUID uuid, String handle, String command, String message, String destination)
+	{
 		this.uuid = uuid;
 		this.handle = handle;
 		this.command = command;
 		this.message = message;
+		this.destination = destination;
 	}
 
 	public void run() {
 		try {
 			if (ChatClient.rb_next_hop.isSelected()) {
 				Socket s = new Socket();
-				s.connect(new InetSocketAddress(ChatClient.getNextHop(), Values.RING_SOCKET),
+				s.connect(new InetSocketAddress(destination, Values.RING_SOCKET),
 						2000);
 
 				ChatClient.sent_messages.add(uuid.toString());
