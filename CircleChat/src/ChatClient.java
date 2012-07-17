@@ -1,4 +1,5 @@
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -10,8 +11,10 @@ import java.util.UUID;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -64,21 +67,70 @@ public class ChatClient {
 		tf_leach_ip = new JTextField();
 
 		btn_join = new JButton("Join");
-		btn_exit = new JButton("");
-		btn_exit.setEnabled(true);
+		btn_exit = new JButton("Exit Gracefully");
+		btn_exit.setEnabled(false);
 		btn_join.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
-				Thread t = new Thread(new SendAMessage(UUID.randomUUID(),
-								tf_handle.getText(), 
-								Values.JOIN, 
-								""));
-				t.start();
+				final JRadioButton rb_Automatic = new JRadioButton("Automatic Join Circle");
+				final JRadioButton rb_Leech  = new JRadioButton("Leech onto");
+				final JRadioButton rb_Manual = new JRadioButton("Manual Join Circle");
+				ButtonGroup options = new ButtonGroup();
+				final JButton Join = new JButton("Join");
+				options.add(rb_Automatic);
+				options.add(rb_Leech);
+				options.add(rb_Manual);
+				
+				final JTextField tf_ip = new JTextField();
+				
+				final JDialog dialog = new JDialog(theFrame,"Join",true);
+				dialog.getContentPane().setLayout(new GridLayout(5,1));
+				dialog.getContentPane().add(rb_Automatic);
+				dialog.getContentPane().add(rb_Leech);
+				dialog.getContentPane().add(rb_Manual);
+				dialog.getContentPane().add(tf_ip);
+				dialog.getContentPane().add(Join);
+				dialog.pack();
+				
+				Join.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) 
+					{
+						if (rb_Automatic.isSelected())
+						{
+							rb_next_hop.setSelected(true);
+							Thread t = new Thread(new SendAMessage(UUID.randomUUID(),
+											tf_handle.getText(), 
+											Values.JOIN, 
+											"",tf_ip.getText()));
+							t.start();
+						}
+						else if (rb_Leech.isSelected())
+						{
+							rb_leach.setSelected(true);
+							System.out.println("Leech will try to start!");
+							leach_client = new LeachClient(tf_ip.getText());
+							Thread leach = new Thread(leach_client);
+							leach.start();
+						}
+						else if (rb_Manual.isSelected())
+						{
+							tf_next_hop.setText(tf_ip.getText());
+						}
+						dialog.setVisible(false);
+					}
+					
+				});
+				
+				dialog.setVisible(true);
+				
 			}
 		});
 
 		tf_prev_hop.setEditable(false);
 		tf_leach_ip.setEditable(false);
+		tf_next_hop.setEditable(false);
 
 		JPanel Controls = new JPanel();
 		Controls.setLayout(new GridLayout(5, 2));
@@ -87,17 +139,16 @@ public class ChatClient {
 		ButtonGroup leach_next_hop = new ButtonGroup();
 
 		rb_leach = new JRadioButton("Leech onto:");
+		rb_leach.setEnabled(false);
 		rb_next_hop = new JRadioButton("Next Hop:");
+		rb_next_hop.setEnabled(false);
 
 		rb_next_hop.setSelected(true);
 		rb_leach.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				if (rb_leach.isSelected()) {
-					System.out.println("Leech will try to start!");
-					leach_client = new LeachClient();
-					Thread leach = new Thread(leach_client);
-					leach.start();
+					
 				}
 			}
 

@@ -13,12 +13,22 @@ import java.util.UUID;
  */
 public class LeachClient implements Runnable {
 	Socket s;
+	String Host_Address;
+	
+	/**
+	 * Standard Constructor
+	 * @param Host IP Address of the host
+	 */
+	public LeachClient(String Host)
+	{
+		Host_Address = Host;
+	}
 
 	public void run() {
 		try {
 
 			s = new Socket();
-			s.connect(new InetSocketAddress(ChatClient.getNextHop(), Values.LEECH_SOCKET), 2000);
+			s.connect(new InetSocketAddress(Host_Address, Values.LEECH_SOCKET), 2000);
 			while (true) {
 				BufferedReader message_br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				
