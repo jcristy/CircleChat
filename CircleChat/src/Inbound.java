@@ -49,6 +49,8 @@ public class Inbound implements Runnable {
 									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));
 							t.start();
 						}
+						dos.close();
+						reply.close();
 						break;
 					case Values.JOIN_I:
 						Message ourResponse = new Message("","",Values.ACK,ChatClient.getNextHop());
@@ -56,42 +58,23 @@ public class Inbound implements Runnable {
 						Message theirResponse = new Message(reply.getInputStream());
 						if (theirResponse.getCommand().equals(Values.ACK))
 							ChatClient.setNextHop(reply.getInetAddress().getHostAddress());
+						dos.close();
+						reply.close();
 						break;
 					case Values.LEAVE_I:
 						ChatClient.setNextHop(msg.getMessage());
+						dos.close();
+						reply.close();
 						break;
 					case Values.REQUEST_JAR_I:
 						System.out.println("Send the file back");
-						
-						File f = new File(".");
-						
-						for (File file :f.listFiles())
-						{
-						if (file.getName().equals("CircleChat.jar"))
-							{
-								dos.write("HTTP/1.0 200 OK\r\n".getBytes());
-								dos.write(("Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n").getBytes());
-								dos.write("Content-Type: binary/octet-stream\r\n".getBytes());
-								//dos.write("Content-Type: text/txt\r\n".getBytes());
-								dos.write("Content-Disposition: attachment; filename=CircleChat.jar\r\n".getBytes());
-								dos.write(("Content-Length: "+file.length()+"\r\n").getBytes());
-								//dos.write(("Content-Length: "+("Good!".getBytes().length)+"\r\n").getBytes());
-								dos.write("\r\n".getBytes());
-								
-								
-								dos.flush();
-								FileInputStream fis = new FileInputStream(file);
-								for (int i=0; i<file.length();i++)
-									dos.write(fis.read());
-								 
-							}
-						}
+						Thread t = new Thread(new FileDownloadHelper(reply, dos));
+						t.start();
 						break;
 					default:
 					}
 					
-					dos.close();
-					reply.close();
+					
 					
 					
 				} catch (SocketTimeoutException ste) {
@@ -111,5 +94,66 @@ public class Inbound implements Runnable {
 			}
 		}
 	}
+	public class FileDownloadHelper implements Runnable
+	{
+		Socket reply;
+		DataOutputStream dos;
+		public FileDownloadHelper(Socket reply, DataOutputStream dos) 
+		{
+			this.reply = reply;
+			this.dos = dos;
+		}
 
+		public void run()
+		{
+			try{
+				File f = new File(".");
+				
+				boolean wroteFile = false;
+				for (File file :f.listFiles())
+				{
+					if (file.getName().equals("CircleChat.jar"))
+					{
+						dos.write("HTTP/1.0 200 OK\r\n".getBytes());
+						dos.write(("Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n").getBytes());
+						dos.write("Content-Type: binary/octet-stream\r\n".getBytes());
+						//dos.write("Content-Type: text/txt\r\n".getBytes());
+						dos.write("Content-Disposition: attachment; filename=CircleChat.jar\r\n".getBytes());
+						dos.write(("Content-Length: "+file.length()+"\r\n").getBytes());
+						//dos.write(("Content-Length: "+("Good!".getBytes().length)+"\r\n").getBytes());
+						dos.write("\r\n".getBytes());
+						
+						
+						dos.flush();
+						FileInputStream fis = new FileInputStream(file);
+						for (int i=0; i<file.length();i++)
+							dos.write(fis.read());
+						wroteFile = true;
+					}
+				}
+				if (!wroteFile)
+				{
+					String html = "<html><body>404 CircleChat Client not available for download from this host!</body></html>";
+					System.out.println("File Not Found");
+					dos.write("HTTP/1.0 404 Not Found\r\n".getBytes());
+					dos.write("Content-Type: text/html\r\n".getBytes());
+					dos.write(("Content-Length: "+html.getBytes().length+"\r\n").getBytes());
+					dos.write(("\r\n").getBytes());
+					dos.write(html.getBytes());
+					dos.flush();
+				}
+			}catch (Exception e)
+			{
+				
+			}
+			try 
+			{
+				dos.close();
+				reply.close();
+			} catch (IOException e1) 
+			{
+				e1.printStackTrace();
+			}
+		}
+	}
 }
