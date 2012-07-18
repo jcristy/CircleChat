@@ -63,6 +63,7 @@ public class Inbound implements Runnable {
 						break;
 					case Values.LEAVE_I:
 						ChatClient.setNextHop(msg.getMessage());
+						Message.ACK.sendMessage(dos);
 						dos.close();
 						reply.close();
 						break;
