@@ -29,39 +29,38 @@ public class Inbound implements Runnable {
 					DataOutputStream dos = new DataOutputStream(
 							reply.getOutputStream());
 
-					BufferedReader message_br = new BufferedReader(	new InputStreamReader(reply.getInputStream()));
+					//BufferedReader message_br = new BufferedReader(	new InputStreamReader(reply.getInputStream()));
 					
-					Message msg = new Message(message_br);
+					Message msg = new Message(reply.getInputStream());
 					
 					
-					switch (msg.getCommand())
+					switch (msg.getCommandInt())
 					{
 					case Values.SEND_MESSAGE_I:
 						ChatClient.setPrevHop(reply.getInetAddress()
 								.getHostAddress());
-						dos.write(Values.ACK.getBytes());
-						ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
+						Message.ACK.sendMessage(dos);
+						ChatClient.addToMessages(msg.getHandle() + " " + ": " + msg.getMessage());
 						break;
 					case Values.JOIN_I:
-						dos.write((ChatClient.getNextHop()+"\r\n").getBytes());
-						dos.flush();
-						String response = message_br.readLine();
-						if (response.equals(Values.ACK))
+						Message ourResponse = new Message("","",Values.ACK,ChatClient.getNextHop());
+						ourResponse.sendMessage(dos);
+						Message theirResponse = new Message(reply.getInputStream());
+						if (theirResponse.getCommand().equals(Values.ACK))
 							ChatClient.setNextHop(reply.getInetAddress().getHostAddress());
 						break;
 					case Values.LEAVE_I:
-						ChatClient.setNextHop(msg.message);
+						ChatClient.setNextHop(msg.getMessage());
 						break;
 					default:
 					}
 					
 					dos.close();
 					reply.close();
-					message_br.close();
 					
-					if (!ChatClient.sent_messages.remove(msg.uid)) {
+					if (!ChatClient.sent_messages.remove(msg.getUID())) {
 						Thread t = new Thread(new SendAMessage(
-								UUID.fromString(msg.uid), msg.handle, msg.getCommandString(), msg.message));
+								UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));
 						t.start();
 					}
 				} catch (SocketTimeoutException ste) {

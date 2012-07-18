@@ -32,18 +32,15 @@ public class LeachServer implements Runnable {
 					ChatClient.tf_leach_ip.setText(reply.getInetAddress()
 							.getHostAddress());
 
-					BufferedReader message_br = new BufferedReader(
-							new InputStreamReader(reply.getInputStream()));
-
 					while (!ChatClient.quit) {
-						Message msg = new Message(message_br);
+						Message msg = new Message(reply.getInputStream());
 						
 						
-						if (!ChatClient.sent_messages.remove(msg.uid)) 
+						if (!ChatClient.sent_messages.remove(msg.getUID())) 
 						{
 							Thread t = new Thread(new SendAMessage(
-									UUID.fromString(msg.uid), msg.handle, msg.getCommandString(),
-									msg.message));
+									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(),
+									msg.getMessage()));
 							t.start();
 						}
 					}

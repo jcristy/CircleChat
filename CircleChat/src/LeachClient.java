@@ -30,14 +30,13 @@ public class LeachClient implements Runnable {
 			s = new Socket();
 			s.connect(new InetSocketAddress(Host_Address, Values.LEECH_SOCKET), 2000);
 			while (true) {
-				BufferedReader message_br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				
-				Message msg = new Message(message_br);
+				Message msg = new Message(s.getInputStream());
 
-				switch (msg.getCommand())
+				switch (msg.getCommandInt())
 				{
 				case Values.SEND_MESSAGE_I:
-					ChatClient.addToMessages(msg.handle + " " + ": " + msg.message);
+					ChatClient.addToMessages(msg.getHandle() + " " + ": " + msg.getMessage());
 					break;
 				case Values.JOIN_I:
 					
