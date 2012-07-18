@@ -14,6 +14,7 @@ import java.util.UUID;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -65,22 +66,9 @@ public class ChatClient {
 
 		theFrame = new JFrame();
 		theFrame.setTitle("Circle Chat");
-		JMenuBar themenubar = new JMenuBar();
+		JMenuBar themenubar = new ChatClientMenuBar();
 		theFrame.setJMenuBar(themenubar);
-		JMenu menu_help = new JMenu("Help");
-		themenubar.add(menu_help);
-		JMenuItem mi_show_help = new JMenuItem("Help");
-		mi_show_help.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				JDialog HelpDialog = new Help();
-				HelpDialog.setVisible(true);
-			}
-			
-		});
-		menu_help.add(mi_show_help);
+		
 
 		tf_next_hop = new JTextField();
 		tf_handle = new JTextField();
