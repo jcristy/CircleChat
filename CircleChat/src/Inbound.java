@@ -1,10 +1,13 @@
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Date;
 import java.util.UUID;
 /**
  * Inbound sets up the server to accept messages from the previous hop
@@ -59,7 +62,30 @@ public class Inbound implements Runnable {
 						break;
 					case Values.REQUEST_JAR_I:
 						System.out.println("Send the file back");
-						dos.write("Hello!".getBytes());
+						
+						File f = new File(".");
+						
+						for (File file :f.listFiles())
+						{
+						if (file.getName().equals("CircleChat.jar"))
+							{
+								dos.write("HTTP/1.0 200 OK\r\n".getBytes());
+								dos.write(("Date: Fri, 31 Dec 1999 23:59:59 GMT\r\n").getBytes());
+								dos.write("Content-Type: binary/octet-stream\r\n".getBytes());
+								//dos.write("Content-Type: text/txt\r\n".getBytes());
+								dos.write("Content-Disposition: attachment; filename=CircleChat.jar\r\n".getBytes());
+								dos.write(("Content-Length: "+file.length()+"\r\n").getBytes());
+								//dos.write(("Content-Length: "+("Good!".getBytes().length)+"\r\n").getBytes());
+								dos.write("\r\n".getBytes());
+								
+								
+								dos.flush();
+								FileInputStream fis = new FileInputStream(file);
+								for (int i=0; i<file.length();i++)
+									dos.write(fis.read());
+								 
+							}
+						}
 						break;
 					default:
 					}
