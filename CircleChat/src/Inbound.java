@@ -41,6 +41,11 @@ public class Inbound implements Runnable {
 								.getHostAddress());
 						Message.ACK.sendMessage(dos);
 						ChatClient.addToMessages(msg.getHandle() + " " + ": " + msg.getMessage());
+						if (!ChatClient.sent_messages.remove(msg.getUID())) {
+							Thread t = new Thread(new SendAMessage(
+									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));
+							t.start();
+						}
 						break;
 					case Values.JOIN_I:
 						Message ourResponse = new Message("","",Values.ACK,ChatClient.getNextHop());
@@ -52,17 +57,17 @@ public class Inbound implements Runnable {
 					case Values.LEAVE_I:
 						ChatClient.setNextHop(msg.getMessage());
 						break;
+					case Values.REQUEST_JAR_I:
+						System.out.println("Send the file back");
+						dos.write("Hello!".getBytes());
+						break;
 					default:
 					}
 					
 					dos.close();
 					reply.close();
 					
-					if (!ChatClient.sent_messages.remove(msg.getUID())) {
-						Thread t = new Thread(new SendAMessage(
-								UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));
-						t.start();
-					}
+					
 				} catch (SocketTimeoutException ste) {
 					if (ChatClient.quit) {
 						inbound.close();

@@ -25,6 +25,9 @@ public class Values
 	final static String LEAVE = "bye";
 	final static int LEAVE_I = 2;
 	
+	final static String REQUEST_JAR = "jar";
+	final static int REQUEST_JAR_I = 3;
+	
 	final static char END_OF_TRANSMISSION_BLOCK = (char)23;
 	final static char END_OF_TRANSMISSION = (char)4;
 }

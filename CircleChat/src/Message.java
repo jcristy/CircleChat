@@ -70,12 +70,21 @@ public class Message
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 	    BufferedInputStream bis = new BufferedInputStream(input);
+	    int count = 0;
 	    byte data = 0;
 	    try {
 		    do
 		    {
 				data = (byte)bis.read();
+				count++;
+				
+				System.out.print((char)data);
 				if (data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION) baos.write(data);
+				if (count==3 && baos.toString().equalsIgnoreCase("GET"))
+				{
+					info.put(KEY_COMMAND, Values.REQUEST_JAR);
+					return;
+				}
 		    }while(data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION);
 	    } catch (IOException e) {
 			e.printStackTrace();
@@ -159,6 +168,8 @@ public class Message
 			return Values.JOIN_I;
 		else if (cmd.equals(Values.LEAVE))
 			return Values.LEAVE_I;
+		else if (cmd.equals(Values.REQUEST_JAR))
+			return Values.REQUEST_JAR_I;
 		else
 			return -1;
 	}
@@ -175,7 +186,8 @@ public class Message
 			
 		case Values.JOIN_I:
 			return Values.JOIN;
-			
+		case Values.REQUEST_JAR_I:
+			return Values.REQUEST_JAR;
 		default:
 			return "";
 		}
