@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -24,33 +25,48 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class Message 
 {
-	String uid;
-	String handle;
-	private int command;
-	String message;
+	private static String KEY_UID = "UID";
+	private static String KEY_HANDLE = "HANDLE";
+	private static String KEY_COMMAND = "COMMAND";
+	private static String KEY_MESSAGE = "MESSAGE";
 	
+	private HashMap<String,String> info;
+//	private String uid;
+//	private String handle;
+//	private int command;
+//	private String message;
+	public static final Message ACK;
+	static
+	{
+		ACK = new Message();
+		ACK.setKeyValue(KEY_COMMAND, Values.ACK);
+	}
+	private Message()
+	{
+		info = new HashMap<String,String>();
+	}
 	/**
 	 * Generates a message from the given Reader.  For now, expects 4 lines on the data stream.
 	 * @param message_br the reader
-	 * @deprecated
+	 * @deprecated Replaced by Message(InputStream)
 	 */
 	public Message (BufferedReader message_br)
 	{
 		try
 		{
-			uid = message_br.readLine();
-			handle = message_br.readLine();
-			String temp = message_br.readLine();
-			command = commandInt(temp);
-			message = message_br.readLine();
-			
+			System.err.println("NOT SUPPORTED ANYMORE");
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Generates a message from the given stream.
+	 * @param input the InputStream
+	 */
 	public Message (InputStream input)
 	{
+		info = new HashMap<String,String>();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 	    BufferedInputStream bis = new BufferedInputStream(input);
@@ -59,20 +75,32 @@ public class Message
 		    do
 		    {
 				data = (byte)bis.read();
-				baos.write(data);
+				if (data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION) baos.write(data);
 		    }while(data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION);
 	    } catch (IOException e) {
 			e.printStackTrace();
 		}
-	    byte[] all_data = baos.toByteArray();
 	    
-	    
+	    System.out.println(baos.toString());
 	    
 	    SAXParserFactory spf = SAXParserFactory.newInstance();
 	    try {
 			SAXParser parser = spf.newSAXParser();
-			parser.parse(, new DefaultHandler(){
-				
+			parser.parse(new ByteArrayInputStream(baos.toByteArray()), new DefaultHandler()
+			{
+				String key;
+				public void startElement(String uri, String localName,String qName, org.xml.sax.Attributes attributes) throws SAXException 
+		        {
+					key = qName;
+		        }
+				public void endElement(String uri, String localName,String qName) throws SAXException 
+				{
+					key = "";
+				}
+				public void characters(char ch[], int start, int length) throws SAXException 
+				{
+					info.put(key,new String(ch, start, length));
+				}
 			});
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -93,14 +121,15 @@ public class Message
 	 */
 	public Message (String uid, String handle, String Command, String message)
 	{
-		this(uid,handle,commandInt(Command),message);
+		info = new HashMap<String,String>();
+		info.put(KEY_UID, uid);
+		info.put(KEY_HANDLE, handle);
+		info.put(KEY_COMMAND, Command);
+		info.put(KEY_MESSAGE, message);
 	}
 	public Message (String uid, String handle, int command, String message)
 	{
-		this.uid = uid;
-		this.handle = handle;
-		this.command = command;
-		this.message = message;
+		this(uid,handle,commandStr(command),message);
 	}
 	/**
 	 * Utility method to make sending a previously created message easier
@@ -109,10 +138,19 @@ public class Message
 	 */
 	public void sendMessage(DataOutputStream dos) throws IOException
 	{
+		/*
 		dos.write((uid + "\r\n").getBytes());
 		dos.write((handle + "\r\n").getBytes());
 		dos.write((getCommandString() + "\r\n").getBytes());
 		dos.write((message + "\r\n").getBytes());
+		*/
+		dos.write(("<Message>").getBytes());
+		for (String key :info.keySet())
+		{
+			dos.write(("<"+key+">"+info.get(key)+"</"+key+">").getBytes());
+		}
+		dos.write(("</Message>"+Values.END_OF_TRANSMISSION).getBytes());
+		dos.flush();
 	}
 	public static int commandInt(String cmd)
 	{
@@ -125,14 +163,7 @@ public class Message
 		else
 			return -1;
 	}
-	public String getCommandString()
-	{
-		return commandStr(command);
-	}
-	public int getCommand()
-	{
-		return command;
-	}
+	
 	public static String commandStr(int cmd)
 	{
 		switch(cmd)
@@ -149,5 +180,29 @@ public class Message
 		default:
 			return "";
 		}
+	}
+	public String getHandle()
+	{
+		return info.get(KEY_HANDLE);
+	}
+	public String getMessage()
+	{
+		return info.get(KEY_MESSAGE);
+	}
+	public String getCommand()
+	{
+		return info.get(KEY_COMMAND);
+	}
+	public int getCommandInt()
+	{
+		return commandInt(getCommand());
+	}
+	public String getUID()
+	{
+		return info.get(KEY_UID);
+	}
+	private void setKeyValue(String Key, String value)
+	{
+		info.put(Key, value);
 	}
 }

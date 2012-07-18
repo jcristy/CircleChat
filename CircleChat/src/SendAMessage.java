@@ -46,16 +46,16 @@ public class SendAMessage implements Runnable {
 
 				dos.flush();
 
-				BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-				String response = br.readLine();
-				if (command.equals(Values.SEND_MESSAGE) && response.equals(Values.ACK)) {
+				Message response = new Message(s.getInputStream());
+				
+				if (command.equals(Values.SEND_MESSAGE) && response.getCommand().equals(Values.ACK)) 
+				{
 					System.out.println("Success");
 				}
-				else if (command.equals(Values.JOIN))
+				else if (command.equals(Values.JOIN) && response.getCommand().equals(Values.ACK))
 				{
-					ChatClient.setNextHop(response);
-					dos.write((Values.ACK+"\r\n").getBytes());
-					dos.flush();
+					ChatClient.setNextHop(response.getMessage());
+					Message.ACK.sendMessage(dos);
 				}
 
 				dos.close();
