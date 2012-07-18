@@ -95,6 +95,11 @@ public class Inbound implements Runnable {
 			}
 		}
 	}
+	/**
+	 * FileDownloadHelper is a separate thread to handle requests for the JAR file
+	 * @author jcristy
+	 *
+	 */
 	public class FileDownloadHelper implements Runnable
 	{
 		Socket reply;

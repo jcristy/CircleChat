@@ -19,12 +19,15 @@ public class Values
 	final static String SEND_MESSAGE = "message";
 	final static int SEND_MESSAGE_I = 0;
 	
+	/** Command to ask to join the network */
 	final static String JOIN = "join";
 	final static int JOIN_I = 1;
 	
+	/** Command to announce you are leaving */
 	final static String LEAVE = "bye";
 	final static int LEAVE_I = 2;
 	
+	/** Command to request the JAR File, should not be set by a client...only by a server interpreting a command from a browser*/
 	final static String REQUEST_JAR = "jar";
 	final static int REQUEST_JAR_I = 3;
 	

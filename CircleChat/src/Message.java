@@ -21,8 +21,10 @@ import org.xml.sax.helpers.DefaultHandler;
  * command
  * message
  * @author jcristy
- * TODO Expand to handle commands such as "who is your next node" and "let me join", etc.
+ * 
+ * 
  */
+//TODO Expand to handle commands such as "who is your next node" and "let me join", etc.
 public class Message 
 {
 	private static String KEY_UID = "UID";
@@ -35,31 +37,21 @@ public class Message
 //	private String handle;
 //	private int command;
 //	private String message;
+	/** Easy way to send ACK */
 	public static final Message ACK;
 	static
 	{
 		ACK = new Message();
 		ACK.setKeyValue(KEY_COMMAND, Values.ACK);
 	}
+	/**
+	 * Creates a blank message which can be constructed piece by piece.  Should become public later.
+	 */
 	private Message()
 	{
 		info = new HashMap<String,String>();
 	}
-	/**
-	 * Generates a message from the given Reader.  For now, expects 4 lines on the data stream.
-	 * @param message_br the reader
-	 * @deprecated Replaced by Message(InputStream)
-	 */
-	public Message (BufferedReader message_br)
-	{
-		try
-		{
-			System.err.println("NOT SUPPORTED ANYMORE");
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+	
 	/**
 	 * Generates a message from the given stream.
 	 * @param input the InputStream
@@ -160,6 +152,11 @@ public class Message
 		dos.write(("</Message>"+Values.END_OF_TRANSMISSION).getBytes());
 		dos.flush();
 	}
+	/**
+	 * Converts the Command to an int for use with switch statements
+	 * @param cmd the String version of the command
+	 * @return the corresponding int
+	 */
 	public static int commandInt(String cmd)
 	{
 		if (cmd.equals(Values.SEND_MESSAGE))
@@ -173,7 +170,11 @@ public class Message
 		else
 			return -1;
 	}
-	
+	/**
+	 * Converts the int version of a command to the String version
+	 * @param cmd the command as an integer
+	 * @return the command as a string
+	 */
 	public static String commandStr(int cmd)
 	{
 		switch(cmd)
