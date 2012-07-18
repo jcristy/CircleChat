@@ -1,7 +1,11 @@
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -60,6 +64,9 @@ public class Message
 	 * Generates a message from the given stream.
 	 * @param input the InputStream
 	 */
+	public Message(InputStream input)
+	{
+		info = new HashMap<String,String>();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 	    BufferedInputStream bis = new BufferedInputStream(input);
@@ -68,7 +75,7 @@ public class Message
 		    do
 		    {
 				data = (byte)bis.read();
-				baos.write(data);
+				if (data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION) baos.write(data);
 		    }while(data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION);
 	    } catch (IOException e) {
 			e.printStackTrace();
