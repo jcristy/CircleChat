@@ -1,17 +1,6 @@
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Message, handles the current protocol:
@@ -32,7 +21,6 @@ public class Message
 	/**
 	 * Generates a message from the given Reader.  For now, expects 4 lines on the data stream.
 	 * @param message_br the reader
-	 * @deprecated
 	 */
 	public Message (BufferedReader message_br)
 	{
@@ -48,41 +36,6 @@ public class Message
 		{
 			e.printStackTrace();
 		}
-	}
-	public Message (InputStream input)
-	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		
-	    BufferedInputStream bis = new BufferedInputStream(input);
-	    byte data = 0;
-	    try {
-		    do
-		    {
-				data = (byte)bis.read();
-				baos.write(data);
-		    }while(data!=Values.END_OF_TRANSMISSION_BLOCK && data!= Values.END_OF_TRANSMISSION);
-	    } catch (IOException e) {
-			e.printStackTrace();
-		}
-	    byte[] all_data = baos.toByteArray();
-	    
-	    
-	    
-	    SAXParserFactory spf = SAXParserFactory.newInstance();
-	    try {
-			SAXParser parser = spf.newSAXParser();
-			parser.parse(, new DefaultHandler(){
-				
-			});
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
 	}
 	/**
 	 * Allows creation of a message a user would like to send
