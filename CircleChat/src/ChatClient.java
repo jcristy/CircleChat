@@ -1,10 +1,14 @@
 import help.Help;
 
+import java.awt.AWTException;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.MenuBar;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -60,6 +64,8 @@ public class ChatClient {
 	static LeachServer leech_server;
 	static LeachClient leach_client;
 	static Inbound inbound;
+	
+	public static ToTheTray ttt;
 
 	public static void main(String[] args) {
 		sent_messages = new ArrayList<String>();
@@ -235,16 +241,26 @@ public class ChatClient {
 			}
 
 			public void windowClosed(WindowEvent arg0) {
-				if (inbound != null)
+				
+				
+			}
+
+			public void windowClosing(WindowEvent arg0) 
+			{
+				if (!SettingsDialog.run_background && inbound != null)
 					try {
 						inbound.inbound.close();
 					} catch (IOException e) {
 
 						e.printStackTrace();
 					}
-			}
-
-			public void windowClosing(WindowEvent arg0) {
+				if (SettingsDialog.run_background)
+				{
+					System.out.println("got here");
+					theFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+					ToTheTray ttt = new ToTheTray();
+					ttt.toTheTray(theFrame);
+				}
 			}
 
 			public void windowDeactivated(WindowEvent arg0) {
