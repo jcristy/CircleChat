@@ -13,6 +13,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import javax.swing.AbstractAction;
@@ -249,7 +251,8 @@ public class ChatClient {
 			{
 				if (!SettingsDialog.run_background && inbound != null)
 					try {
-						inbound.inbound.close();
+						if (inbound!=null)
+							inbound.inbound.close();
 					} catch (IOException e) {
 
 						e.printStackTrace();
@@ -258,8 +261,17 @@ public class ChatClient {
 				{
 					System.out.println("got here");
 					theFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-					ToTheTray ttt = new ToTheTray();
+					final ToTheTray ttt = new ToTheTray();
 					ttt.toTheTray(theFrame);
+					Timer t = new Timer();
+					t.schedule(new TimerTask(){
+
+						@Override
+						public void run() {
+							ttt.notifyMessage();
+						}
+						
+					}, 1000);
 				}
 			}
 
