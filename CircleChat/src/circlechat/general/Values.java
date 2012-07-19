@@ -1,3 +1,4 @@
+package circlechat.general;
 /**
  * Global values
  * @author jcristy

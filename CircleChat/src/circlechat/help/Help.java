@@ -1,4 +1,4 @@
-package help;
+package circlechat.help;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -1,3 +1,4 @@
+package circlechat.general;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

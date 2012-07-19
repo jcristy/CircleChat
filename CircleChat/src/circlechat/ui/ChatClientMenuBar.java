@@ -1,5 +1,4 @@
 package circlechat.ui;
-import help.Help;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +7,8 @@ import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import circlechat.help.Help;
 
 
 public class ChatClientMenuBar extends JMenuBar

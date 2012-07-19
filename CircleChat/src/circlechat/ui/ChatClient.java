@@ -1,5 +1,4 @@
 package circlechat.ui;
-import help.Help;
 
 import java.awt.AWTException;
 import java.awt.GridLayout;
@@ -37,6 +36,8 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.JButton;
+
+import circlechat.help.Help;
 /**
  * Chat client is a ring based chat application
  * @author jcristy
