@@ -8,6 +8,8 @@ import java.awt.PopupMenu;
 import java.awt.Stroke;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -16,26 +18,30 @@ import javax.swing.JFrame;
 
 public class ToTheTray 
 {
-	private static BufferedImage img;
+	
 	private static TrayIcon toAdd;
 	public void toTheTray(final JFrame theFrame)
 	{
+		Messages_to_Read = 0;
 		final SystemTray theTray = SystemTray.getSystemTray();
-		img = new BufferedImage(16,16,BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D g2d = img.createGraphics();
-		g2d.setColor(new Color(0,0,0,0));
-		g2d.fillRect(0, 0, 16, 16);
-		g2d.setColor(Color.red);
-		g2d.setStroke(new BasicStroke(1f));
-		g2d.drawArc(1, 1, 14, 14, 30, 300);
-		g2d.drawArc(4, 4, 8, 8, 210, 300);
+		
 		
 		try {
 			PopupMenu pm = new PopupMenu();
-			pm.add(new MenuItem("Quit <soon>"));
-			toAdd = new TrayIcon(img,"Circle Chat",pm);
+			MenuItem mi_quit = new MenuItem("Quit");
+			pm.add(mi_quit);
+			mi_quit.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					ChatClient.close();
+				}
+				
+			});
+			
+			toAdd = new TrayIcon(getIcon(0),"Circle Chat",pm);
 			toAdd.setImageAutoSize(true);
-			toAdd.setImage(img);
+			toAdd.setImage(getIcon(0));
 			theTray.add(toAdd);
 			toAdd.addMouseListener(new MouseListener(){
 
@@ -81,10 +87,32 @@ public class ToTheTray
 		
 		theFrame.setVisible(false);
 	}
-	public void notifyMessage()
+	
+	public static int Messages_to_Read = 0;
+	
+	public static void notifyMessage()
 	{
-		//img.getGraphics().setColor(Color.red);
-		img.createGraphics().fillRect(0, 0, 10, 10);
-		toAdd.setImage(img);
+		
+		Messages_to_Read++;
+		
+		if (toAdd !=null)
+			toAdd.setImage(getIcon(Messages_to_Read));
+	}
+	public static Image getIcon(int count)
+	{
+		BufferedImage img = new BufferedImage(16,16,BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D g2d = img.createGraphics();
+		g2d.setColor(new Color(0,0,0,0));
+		g2d.fillRect(0, 0, 16, 16);
+		g2d.setColor(Color.red);
+		g2d.setStroke(new BasicStroke(1f));
+		g2d.drawArc(1, 1, 14, 14, 30, 300);
+		g2d.drawArc(4, 4, 8, 8, 210, 300);
+		int height = img.getHeight();
+		int width  = img.getWidth();
+		g2d.setColor(Color.cyan);
+		if (count!=0) g2d.drawString(""+Messages_to_Read, width-g2d.getFontMetrics().stringWidth(""+Messages_to_Read), height-1);
+		
+		return img;
 	}
 }

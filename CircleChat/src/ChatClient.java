@@ -250,28 +250,13 @@ public class ChatClient {
 			public void windowClosing(WindowEvent arg0) 
 			{
 				if (!SettingsDialog.run_background && inbound != null)
-					try {
-						if (inbound!=null)
-							inbound.inbound.close();
-					} catch (IOException e) {
-
-						e.printStackTrace();
-					}
+						close();
 				if (SettingsDialog.run_background)
 				{
 					System.out.println("got here");
 					theFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 					final ToTheTray ttt = new ToTheTray();
 					ttt.toTheTray(theFrame);
-					Timer t = new Timer();
-					t.schedule(new TimerTask(){
-
-						@Override
-						public void run() {
-							ttt.notifyMessage();
-						}
-						
-					}, 1000);
 				}
 			}
 
@@ -307,7 +292,7 @@ public class ChatClient {
 	 */
 	public static void addToMessages(String text) {
 		
-		
+		ttt.notifyMessage();
 		ta_messages.setText(ta_messages.getText() + "\r\n" + text);
 		ta_messages.setCaretPosition(ta_messages.getDocument().getLength());
 		
@@ -333,5 +318,16 @@ public class ChatClient {
 	 */
 	public static void setNextHop(String text) {
 		tf_next_hop.setText(text);
+	}
+	public static void close()
+	{
+		System.out.println("Shutting Down");
+		try{
+			if (inbound!=null)
+				inbound.inbound.close();
+			if (leech_server!=null)
+				leech_server.inbound.close();
+		}catch(Exception e){e.printStackTrace();}
+		System.exit(0);
 	}
 }
