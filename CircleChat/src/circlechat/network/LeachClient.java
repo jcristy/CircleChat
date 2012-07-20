@@ -35,9 +35,9 @@ public class LeachClient implements Runnable {
 			s = new Socket();
 			s.connect(new InetSocketAddress(Host_Address, Values.LEECH_SOCKET), 2000);
 			while (true) {
-				
+				System.out.println("Here!");
 				Message msg = new Message(s.getInputStream());
-
+				
 				switch (msg.getCommandInt())
 				{
 				case Values.SEND_MESSAGE_I:
@@ -50,6 +50,10 @@ public class LeachClient implements Runnable {
 					
 					break;
 				default:
+				}
+				if (msg.getCommand().equals(Values.ACK))
+				{
+					System.out.println("Connected");
 				}
 			}
 
@@ -75,8 +79,9 @@ public class LeachClient implements Runnable {
 				Message msg = new Message((uuid.toString()),handle,command,message);
 				
 				msg.sendMessage(dos);
-
+				
 				dos.flush();
+				System.out.println("Message Sent");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

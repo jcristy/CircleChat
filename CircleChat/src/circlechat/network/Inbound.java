@@ -11,6 +11,8 @@ import java.net.SocketTimeoutException;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+
 import circlechat.general.Message;
 import circlechat.general.Settings;
 import circlechat.general.Values;
@@ -95,6 +97,7 @@ public class Inbound implements Runnable {
 			}
 
 		} catch (IOException e) {
+			ChatClient.notify("There May Already be an instance of Chat Client running.  Check the System Tray.","Server Error",JOptionPane.ERROR_MESSAGE,0);
 			e.printStackTrace();
 			try {
 				inbound.close();

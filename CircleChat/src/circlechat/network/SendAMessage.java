@@ -67,7 +67,7 @@ public class SendAMessage implements Runnable {
 				dos.close();
 
 				s.close();
-				if (ChatClient.getLeach_Client() != null)
+				if (ChatClient.getLeach_Server() != null)
 					ChatClient.getLeach_Server().sendMessage(uuid, handle, command,
 							message);
 			} else if (ChatClient.isLeaching()

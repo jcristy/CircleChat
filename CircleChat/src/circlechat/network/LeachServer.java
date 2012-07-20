@@ -1,6 +1,8 @@
 package circlechat.network;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -26,20 +28,27 @@ public class LeachServer implements Runnable {
 
 	public void run() {
 		try {
+			FileOutputStream fos = new FileOutputStream("log.txt");
 			inbound = new ServerSocket(port);
 			inbound.setSoTimeout(1000);
 			System.out.println("Waiting for leach");
+			fos.write("Waiting".getBytes());
+			fos.flush();
 			while (true) {
 				try {
 					reply = inbound.accept();
-
+					fos.write("Connected".getBytes());
+					fos.flush();
 					ChatClient.setLeechText(reply.getInetAddress()
 							.getHostAddress());
-
+					
+					Message.ACK.sendMessage(new DataOutputStream(reply.getOutputStream()));
+					fos.write("Sent the ACK".getBytes());
+					fos.flush();
 					while (!ChatClient.isQuitting()) {
 						Message msg = new Message(reply.getInputStream());
-						
-						
+						fos.write("Got a message".getBytes());
+						fos.flush();
 						if (!ChatClient.removeSentMessage(msg.getUID())) 
 						{
 							Thread t = new Thread(new SendAMessage(
@@ -63,8 +72,21 @@ public class LeachServer implements Runnable {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			try {
+				FileOutputStream fos = new FileOutputStream("log.txt");
+				fos.write(("Error"+e.getMessage()).getBytes());
+				fos.close();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(); 
+			}
+			
 			e.printStackTrace();
 		}
+		
 	}
 
 	public void sendMessage(UUID uuid, String handle, String command,

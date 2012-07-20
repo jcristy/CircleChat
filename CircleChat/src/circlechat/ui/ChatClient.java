@@ -374,4 +374,15 @@ public class ChatClient {
 	{
 		ta_messages.setText("");
 	}
+	/**
+	 * 
+	 * @param text	The message
+	 * @param title	The title of the message
+	 * @param MessageType	JOptionPane.MessageType
+	 * @param Action		Not used, use 0 for no action
+	 */
+	public static void notify(String text,String title, int MessageType, int Action)
+	{
+		JOptionPane.showMessageDialog(theFrame, text, title, MessageType);
+	}
 }
