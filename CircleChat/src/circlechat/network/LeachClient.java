@@ -37,7 +37,7 @@ public class LeachClient implements Runnable {
 			while (true) {
 				System.out.println("Here!");
 				Message msg = new Message(s.getInputStream());
-				
+				ChatClient.setNextHop(Host_Address);
 				switch (msg.getCommandInt())
 				{
 				case Values.SEND_MESSAGE_I:
