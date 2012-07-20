@@ -14,6 +14,7 @@ import java.util.UUID;
 import circlechat.general.Message;
 import circlechat.general.Values;
 import circlechat.ui.ChatClient;
+import circlechat.ui.SettingsDialog;
 /**
  * Inbound sets up the server to accept messages from the previous hop
  * @author jcristy
@@ -48,7 +49,8 @@ public class Inbound implements Runnable {
 						ChatClient.setPrevHop(reply.getInetAddress()
 								.getHostAddress());
 						Message.ACK.sendMessage(dos);
-						ChatClient.addToMessages(msg.getHandle() + " " + ": " + msg.getMessage());
+						Date date = new Date(Long.parseLong(msg.getValue(Message.KEY_CREATION_TIME)));
+						ChatClient.addToMessages(msg.getHandle() + " "+(SettingsDialog.showTime()?"("+date.toString()+")":"") + ": " + msg.getMessage());
 						if (!ChatClient.removeSentMessage(msg.getUID())) {
 							Thread t = new Thread(new SendAMessage(
 									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));

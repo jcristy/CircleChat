@@ -28,10 +28,11 @@ import org.xml.sax.helpers.DefaultHandler;
 //TODO Expand to handle commands such as "who is your next node" and "let me join", etc.
 public class Message 
 {
-	private static String KEY_UID = "UID";
-	private static String KEY_HANDLE = "HANDLE";
-	private static String KEY_COMMAND = "COMMAND";
-	private static String KEY_MESSAGE = "MESSAGE";
+	private final static String KEY_UID = "UID";
+	private final static String KEY_HANDLE = "HANDLE";
+	private final static String KEY_COMMAND = "COMMAND";
+	private final static String KEY_MESSAGE = "MESSAGE";
+	public final static String KEY_CREATION_TIME = "CREATION_TIME";
 	
 	private HashMap<String,String> info;
 //	private String uid;
@@ -214,8 +215,13 @@ public class Message
 	{
 		return info.get(KEY_UID);
 	}
-	private void setKeyValue(String Key, String value)
+	public void setKeyValue(String Key, String value)
 	{
 		info.put(Key, value);
 	}
+	public String getValue(String key)
+	{
+		return info.get(key);
+	}
+	
 }

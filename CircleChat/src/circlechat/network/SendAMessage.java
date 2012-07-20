@@ -47,6 +47,7 @@ public class SendAMessage implements Runnable {
 
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				Message msg = new Message((uuid.toString()),handle,command,message);
+				msg.setKeyValue(Message.KEY_CREATION_TIME, ""+System.currentTimeMillis());
 				msg.sendMessage(dos);
 
 				dos.flush();
