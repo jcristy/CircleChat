@@ -83,7 +83,7 @@ public class LeachServer implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace(); 
 			}
-			
+			ChatClient.setLeechText("Leech Server Not Initialized"+e.getMessage());
 			e.printStackTrace();
 		}
 		
