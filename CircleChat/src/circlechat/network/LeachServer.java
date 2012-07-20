@@ -7,6 +7,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.UUID;
+
+import circlechat.general.Message;
+import circlechat.ui.ChatClient;
 /**
  * LeachServer runs a thread which allows leeches to connect to this node and maintain a persistent connection.  More than one LeachServer can be made to allow for more than one leach per node (each requires a unique port).
  * @author jcristy
@@ -14,7 +17,7 @@ import java.util.UUID;
  */
 public class LeachServer implements Runnable {
 	int port;
-	ServerSocket inbound;
+	public ServerSocket inbound;
 	Socket reply;
 
 	public LeachServer(int port) {

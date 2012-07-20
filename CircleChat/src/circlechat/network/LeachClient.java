@@ -7,6 +7,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.UUID;
+
+import circlechat.general.Message;
+import circlechat.general.Values;
+import circlechat.ui.ChatClient;
 /**
  * LeachClient is used by a leech node to maintain the persistent connection to the leech server on the host node
  * @author jcristy

@@ -7,6 +7,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.UUID;
+
+import circlechat.general.Message;
+import circlechat.general.Values;
+import circlechat.ui.ChatClient;
 /**
  * SendAMessage handles sending a message to the next hop (or to the leach server if in leach mode)
  * @author jcristy

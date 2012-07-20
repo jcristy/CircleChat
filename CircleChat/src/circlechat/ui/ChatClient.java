@@ -37,7 +37,12 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.JButton;
 
+import circlechat.general.Values;
 import circlechat.help.Help;
+import circlechat.network.Inbound;
+import circlechat.network.LeachClient;
+import circlechat.network.LeachServer;
+import circlechat.network.SendAMessage;
 /**
  * Chat client is a ring based chat application
  * @author jcristy
@@ -53,20 +58,20 @@ public class ChatClient {
 	static JTextField tf_message;
 	static JTextArea ta_messages;
 	static JTextField tf_prev_hop;
-	static JTextField tf_leach_ip;
+	public static JTextField tf_leach_ip;
 	static JScrollPane sp_for_messages;
 	static JButton btn_join;
 	static JButton btn_exit;
 
-	static JRadioButton rb_leach;
-	static JRadioButton rb_next_hop;
+	public static JRadioButton rb_leach;
+	public static JRadioButton rb_next_hop;
 
-	static boolean quit = false;
+	public static boolean quit = false;
 
-	static ArrayList<String> sent_messages;
+	public static ArrayList<String> sent_messages;
 
-	static LeachServer leech_server;
-	static LeachClient leach_client;
+	public static LeachServer leech_server;
+	public static LeachClient leach_client;
 	static Inbound inbound;
 	
 	public static ToTheTray ttt;
