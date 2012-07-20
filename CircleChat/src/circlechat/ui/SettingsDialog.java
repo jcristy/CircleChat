@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 
 public class SettingsDialog extends JDialog implements ActionListener
 {
-	public static boolean run_background = false;
+	private static boolean run_background = true;
 	private JCheckBox cb_run_background;
 	public SettingsDialog()
 	{
@@ -26,5 +26,9 @@ public class SettingsDialog extends JDialog implements ActionListener
 		{
 			run_background = cb_run_background.isSelected();
 		}
+	}
+	public static boolean isRun_in_background()
+	{
+		return run_background;
 	}
 }

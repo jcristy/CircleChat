@@ -58,7 +58,7 @@ public class ChatClient {
 	static JTextField tf_message;
 	static JTextArea ta_messages;
 	static JTextField tf_prev_hop;
-	public static JTextField tf_leach_ip;
+	private static JTextField tf_leach_ip;
 	static JScrollPane sp_for_messages;
 	static JButton btn_join;
 	static JButton btn_exit;
@@ -256,9 +256,9 @@ public class ChatClient {
 
 			public void windowClosing(WindowEvent arg0) 
 			{
-				if (!SettingsDialog.run_background && inbound != null)
+				if (!SettingsDialog.isRun_in_background() && inbound != null)
 						close();
-				if (SettingsDialog.run_background)
+				if (SettingsDialog.isRun_in_background())
 				{
 					System.out.println("got here");
 					theFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -319,6 +319,10 @@ public class ChatClient {
 	public static String getNextHop() {
 		return tf_next_hop.getText();
 	}
+	public static void setLeechText(String leech_address)
+	{
+		tf_leach_ip.setText(leech_address);
+	}
 	/**
 	 * Sets the next hop field
 	 * @parap text the new IP address
@@ -331,9 +335,9 @@ public class ChatClient {
 		System.out.println("Shutting Down");
 		try{
 			if (inbound!=null)
-				inbound.inbound.close();
+				inbound.closeSocket();
 			if (leech_server!=null)
-				leech_server.inbound.close();
+				leech_server.closeSocket();
 		}catch(Exception e){e.printStackTrace();}
 		System.exit(0);
 	}

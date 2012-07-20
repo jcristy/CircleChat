@@ -16,9 +16,9 @@ import circlechat.ui.ChatClient;
  * TODO handle a disconnected node to allow for a new leech to connect (or for a reconnect)
  */
 public class LeachServer implements Runnable {
-	int port;
-	public ServerSocket inbound;
-	Socket reply;
+	private int port;
+	private ServerSocket inbound;
+	private Socket reply;
 
 	public LeachServer(int port) {
 		this.port = port;
@@ -33,7 +33,7 @@ public class LeachServer implements Runnable {
 				try {
 					reply = inbound.accept();
 
-					ChatClient.tf_leach_ip.setText(reply.getInetAddress()
+					ChatClient.setLeechText(reply.getInetAddress()
 							.getHostAddress());
 
 					while (!ChatClient.isQuitting()) {
@@ -87,6 +87,10 @@ public class LeachServer implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	public void closeSocket() throws IOException
+	{
+		inbound.close();
 	}
 
 }

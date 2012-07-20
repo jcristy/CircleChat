@@ -21,7 +21,7 @@ import circlechat.ui.ChatClient;
  */
 public class Inbound implements Runnable {
 
-	public ServerSocket inbound;
+	private ServerSocket inbound;
 
 	
 	public void run() {
@@ -99,6 +99,10 @@ public class Inbound implements Runnable {
 				System.out.println("Seriously failed");
 			}
 		}
+	}
+	public void closeSocket() throws IOException
+	{
+		inbound.close();
 	}
 	/**
 	 * FileDownloadHelper is a separate thread to handle requests for the JAR file
