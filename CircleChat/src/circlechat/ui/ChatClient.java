@@ -369,4 +369,8 @@ public class ChatClient {
 	{
 		return sent_messages.remove(uid);
 	}
+	public static void clearMessages() 
+	{
+		ta_messages.setText("");
+	}
 }

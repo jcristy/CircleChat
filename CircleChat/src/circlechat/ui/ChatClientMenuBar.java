@@ -18,8 +18,9 @@ public class ChatClientMenuBar extends JMenuBar
 		super();
 		JMenu menu_settings  = new JMenu("Settings");
 		JMenu menu_help = new JMenu("Help");
-		add(menu_settings);
-		add(menu_help);
+		JMenu menu_file = new JMenu("File");
+		
+		
 		JMenuItem mi_show_help = new JMenuItem("Help");
 		mi_show_help.addActionListener(new ActionListener(){
 
@@ -46,6 +47,34 @@ public class ChatClientMenuBar extends JMenuBar
 			}
 			
 		});
+		JMenuItem mi_clear = new JMenuItem("Clear");
+		mi_clear.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ChatClient.clearMessages();
+			}
+			
+		});
+		JMenuItem mi_exit  = new JMenuItem("Exit");
+		mi_exit.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ChatClient.close();
+			}
+			
+		});
+		JMenuItem mi_save = new JMenuItem("Save");
+		mi_save.setEnabled(false);
+		
+		menu_file.add(mi_save);
+		menu_file.add(mi_clear);
+		menu_file.addSeparator();
+		menu_file.add(mi_exit);
+		
+		add(menu_file);
+		add(menu_settings);
+		add(menu_help);
 	}
 }

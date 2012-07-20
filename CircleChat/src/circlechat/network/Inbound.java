@@ -102,7 +102,8 @@ public class Inbound implements Runnable {
 	}
 	public void closeSocket() throws IOException
 	{
-		inbound.close();
+		if (inbound!=null)
+			inbound.close();
 	}
 	/**
 	 * FileDownloadHelper is a separate thread to handle requests for the JAR file

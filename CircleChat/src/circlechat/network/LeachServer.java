@@ -58,7 +58,8 @@ public class LeachServer implements Runnable {
 
 		} catch (Exception e) {
 			try {
-				inbound.close();
+				if (inbound!=null)
+					inbound.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
