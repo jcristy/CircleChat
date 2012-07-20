@@ -149,7 +149,7 @@ public class Message
 		dos.write(("<Message>").getBytes());
 		for (String key :info.keySet())
 		{
-			dos.write(("<"+key+">"+info.get(key)+"</"+key+">").getBytes());
+			dos.write(("<"+key+"><![CDATA["+info.get(key)+"]]></"+key+">").getBytes());
 		}
 		dos.write(("</Message>"+Values.END_OF_TRANSMISSION).getBytes());
 		dos.flush();
