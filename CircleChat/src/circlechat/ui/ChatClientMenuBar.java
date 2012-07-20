@@ -16,7 +16,7 @@ public class ChatClientMenuBar extends JMenuBar
 	public ChatClientMenuBar()
 	{
 		super();
-		JMenu menu_settings  = new JMenu("Settings");
+		JMenu menu_settings = new SettingsMenu();
 		JMenu menu_help = new JMenu("Help");
 		JMenu menu_file = new JMenu("File");
 		
@@ -33,20 +33,6 @@ public class ChatClientMenuBar extends JMenuBar
 			
 		});
 		menu_help.add(mi_show_help);
-		JMenuItem mi_show_options = new JMenuItem("Simplest Settings");
-		menu_settings.add(mi_show_options);
-		mi_show_options.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				System.out.println("Here!");
-				JDialog SettingsDialog = new SettingsDialog();
-				SettingsDialog.pack();
-				SettingsDialog.setVisible(true);
-			}
-			
-		});
 		JMenuItem mi_clear = new JMenuItem("Clear");
 		mi_clear.addActionListener(new ActionListener(){
 

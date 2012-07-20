@@ -37,6 +37,7 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.JButton;
 
+import circlechat.general.Settings;
 import circlechat.general.Values;
 import circlechat.help.Help;
 import circlechat.network.Inbound;
@@ -256,9 +257,9 @@ public class ChatClient {
 
 			public void windowClosing(WindowEvent arg0) 
 			{
-				if (!SettingsDialog.isRun_in_background() && inbound != null)
+				if (!Settings.isRun_background() && inbound != null)
 						close();
-				if (SettingsDialog.isRun_in_background())
+				if (Settings.isRun_background())
 				{
 					System.out.println("got here");
 					theFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);

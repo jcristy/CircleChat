@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import circlechat.general.Message;
+import circlechat.general.Settings;
 import circlechat.general.Values;
 import circlechat.ui.ChatClient;
 import circlechat.ui.SettingsDialog;
@@ -50,7 +51,7 @@ public class Inbound implements Runnable {
 								.getHostAddress());
 						Message.ACK.sendMessage(dos);
 						Date date = new Date(Long.parseLong(msg.getValue(Message.KEY_CREATION_TIME)));
-						ChatClient.addToMessages(msg.getHandle() + " "+(SettingsDialog.showTime()?"("+date.toString()+")":"") + ": " + msg.getMessage());
+						ChatClient.addToMessages(msg.getHandle() + " "+(Settings.isShow_time()?"("+date.toString()+")":"") + ": " + msg.getMessage());
 						if (!ChatClient.removeSentMessage(msg.getUID())) {
 							Thread t = new Thread(new SendAMessage(
 									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));
