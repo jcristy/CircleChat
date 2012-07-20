@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import javax.swing.JDialog;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.StyledDocument;
@@ -40,7 +41,7 @@ public class Help extends JDialog
 		
 		
 		
-		getContentPane().add(htmlviewer);
+		getContentPane().add(new JScrollPane(htmlviewer));
 		this.setSize(500, 750);
 	}
 	
