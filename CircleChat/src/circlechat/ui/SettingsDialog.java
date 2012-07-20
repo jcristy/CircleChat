@@ -16,7 +16,7 @@ public class SettingsDialog extends JDialog implements ActionListener
 	public SettingsDialog()
 	{
 		super();
-		setLayout(new GridLayout(1,2));
+		setLayout(new GridLayout(2,1));
 		cb_run_background =  new JCheckBox("Run In Background");
 		add(cb_run_background);
 		cb_run_background.setSelected(Settings.isRun_background());
