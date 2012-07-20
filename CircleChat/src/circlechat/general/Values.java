@@ -8,7 +8,7 @@ public class Values
 {
 	//PORTS
 	/** Socket for a LEECH to connect to, should become a range in the future, or rather it should be released once a leech is connected */
-	public final static int LEECH_SOCKET = 8081;
+	public final static int LEECH_SOCKET = 8083;
 	/**The port for ring communications to be sent to */
 	public final static int RING_SOCKET = 8082;
 	
