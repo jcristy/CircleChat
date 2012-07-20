@@ -85,7 +85,6 @@ public class ChatClient {
 		JMenuBar themenubar = new ChatClientMenuBar();
 		theFrame.setJMenuBar(themenubar);
 		
-
 		tf_next_hop = new JTextField();
 		tf_handle = new JTextField();
 		tf_message = new JTextField(50);
@@ -337,10 +336,14 @@ public class ChatClient {
 		try{
 			if (inbound!=null)
 				inbound.closeSocket();
+		}catch(Exception e){e.printStackTrace();}
+		try{
 			if (leech_server!=null)
 				leech_server.closeSocket();
-		}catch(Exception e){e.printStackTrace();}
+		}
+		catch(Exception e){e.printStackTrace();}
 		System.exit(0);
+		
 	}
 	public static LeachServer getLeach_Server()
 	{
