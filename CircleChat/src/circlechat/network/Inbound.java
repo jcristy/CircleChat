@@ -49,7 +49,7 @@ public class Inbound implements Runnable {
 								.getHostAddress());
 						Message.ACK.sendMessage(dos);
 						ChatClient.addToMessages(msg.getHandle() + " " + ": " + msg.getMessage());
-						if (!ChatClient.sent_messages.remove(msg.getUID())) {
+						if (!ChatClient.removeSentMessage(msg.getUID())) {
 							Thread t = new Thread(new SendAMessage(
 									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(), msg.getMessage()));
 							t.start();
@@ -84,7 +84,7 @@ public class Inbound implements Runnable {
 					
 					
 				} catch (SocketTimeoutException ste) {
-					if (ChatClient.quit) {
+					if (ChatClient.isQuitting()) {
 						inbound.close();
 						return;
 					}

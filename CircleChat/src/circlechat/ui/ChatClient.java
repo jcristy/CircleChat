@@ -63,15 +63,15 @@ public class ChatClient {
 	static JButton btn_join;
 	static JButton btn_exit;
 
-	public static JRadioButton rb_leach;
-	public static JRadioButton rb_next_hop;
+	private static JRadioButton rb_leach;
+	private static JRadioButton rb_next_hop;
 
-	public static boolean quit = false;
+	private static boolean quit = false;
 
-	public static ArrayList<String> sent_messages;
+	private static ArrayList<String> sent_messages;
 
-	public static LeachServer leech_server;
-	public static LeachClient leach_client;
+	private static LeachServer leech_server;
+	private static LeachClient leach_client;
 	static Inbound inbound;
 	
 	public static ToTheTray ttt;
@@ -336,5 +336,33 @@ public class ChatClient {
 				leech_server.inbound.close();
 		}catch(Exception e){e.printStackTrace();}
 		System.exit(0);
+	}
+	public static LeachServer getLeach_Server()
+	{
+		return leech_server;
+	}
+	public static LeachClient getLeach_Client()
+	{
+		return leach_client;
+	}
+	public static boolean isLeaching()
+	{
+		return rb_leach.isSelected();
+	}
+	public static boolean isNextHop()
+	{
+		return rb_next_hop.isSelected();
+	}
+	public static void addSentMessage(String uid)
+	{
+		sent_messages.add(uid);
+	}
+	public static boolean isQuitting()
+	{
+		return quit;
+	}
+	public static boolean removeSentMessage(String uid)
+	{
+		return sent_messages.remove(uid);
 	}
 }

@@ -38,12 +38,12 @@ public class SendAMessage implements Runnable {
 
 	public void run() {
 		try {
-			if (ChatClient.rb_next_hop.isSelected()) {
+			if (ChatClient.isNextHop()) {
 				Socket s = new Socket();
 				s.connect(new InetSocketAddress(destination, Values.RING_SOCKET),
 						2000);
 
-				ChatClient.sent_messages.add(uuid.toString());
+				ChatClient.addSentMessage(uuid.toString());
 
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				Message msg = new Message((uuid.toString()),handle,command,message);
@@ -66,12 +66,12 @@ public class SendAMessage implements Runnable {
 				dos.close();
 
 				s.close();
-				if (ChatClient.leech_server != null)
-					ChatClient.leech_server.sendMessage(uuid, handle, command,
+				if (ChatClient.getLeach_Client() != null)
+					ChatClient.getLeach_Server().sendMessage(uuid, handle, command,
 							message);
-			} else if (ChatClient.rb_leach.isSelected()
-					&& ChatClient.leach_client != null) {
-				ChatClient.leach_client.sendMessage(uuid, handle, command,
+			} else if (ChatClient.isLeaching()
+					&& ChatClient.getLeach_Client() != null) {
+				ChatClient.getLeach_Client().sendMessage(uuid, handle, command,
 						message);
 			}
 

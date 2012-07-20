@@ -69,7 +69,7 @@ public class LeachClient implements Runnable {
 			try {
 				System.out.println("(LeachClient)Connected, will try to send");
 
-				ChatClient.sent_messages.add(uuid.toString());
+				ChatClient.addSentMessage(uuid.toString());
 
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 				Message msg = new Message((uuid.toString()),handle,command,message);

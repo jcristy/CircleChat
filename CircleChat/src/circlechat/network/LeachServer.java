@@ -36,11 +36,11 @@ public class LeachServer implements Runnable {
 					ChatClient.tf_leach_ip.setText(reply.getInetAddress()
 							.getHostAddress());
 
-					while (!ChatClient.quit) {
+					while (!ChatClient.isQuitting()) {
 						Message msg = new Message(reply.getInputStream());
 						
 						
-						if (!ChatClient.sent_messages.remove(msg.getUID())) 
+						if (!ChatClient.removeSentMessage(msg.getUID())) 
 						{
 							Thread t = new Thread(new SendAMessage(
 									UUID.fromString(msg.getUID()), msg.getHandle(), msg.getCommand(),
@@ -49,7 +49,7 @@ public class LeachServer implements Runnable {
 						}
 					}
 				} catch (SocketTimeoutException ste) {
-					if (ChatClient.quit) {
+					if (ChatClient.isQuitting()) {
 						inbound.close();
 						return;
 					}
@@ -73,7 +73,7 @@ public class LeachServer implements Runnable {
 			try {
 				System.out.println("Connected, will try to send");
 
-				ChatClient.sent_messages.add(uuid.toString());
+				ChatClient.addSentMessage(uuid.toString());
 
 				DataOutputStream dos = new DataOutputStream(
 						reply.getOutputStream());
